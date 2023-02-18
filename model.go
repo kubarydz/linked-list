@@ -23,12 +23,13 @@ func NewLinkedList[T comparable](elem T) LinkedList[T] {
 	}
 }
 
-func (ll LinkedList[T]) Add(val T) {
-	newNode := Node[T]{Previous: ll.Tail}
+func (ll *LinkedList[T]) Add(val T) {
+	newNode := Node[T]{Value: val, Previous: ll.Tail}
+	ll.Tail.Next = &newNode
 	ll.Tail = &newNode
 }
 
-func (ll LinkedList[T]) Contains(val T) bool {
+func (ll *LinkedList[T]) Contains(val T) bool {
 	for n := ll.Head; n != nil; {
 		if n.Value == val {
 			return true
@@ -38,7 +39,7 @@ func (ll LinkedList[T]) Contains(val T) bool {
 	return false
 }
 
-func (ll LinkedList[T]) Remove(val T) {
+func (ll *LinkedList[T]) Remove(val T) {
 	for n := ll.Head; n != nil; {
 		if n.Value == val {
 			prev := n.Previous
