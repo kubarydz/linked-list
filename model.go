@@ -8,8 +8,7 @@ type LinkedList[T comparable] struct {
 type Node[T any] struct {
 	Value T
 
-	Previous *Node[T]
-	Next     *Node[T]
+	Next *Node[T]
 }
 
 func NewLinkedList[T comparable](elem T) LinkedList[T] {
@@ -24,7 +23,7 @@ func NewLinkedList[T comparable](elem T) LinkedList[T] {
 }
 
 func (ll *LinkedList[T]) Add(val T) {
-	newNode := Node[T]{Value: val, Previous: ll.Tail}
+	newNode := Node[T]{Value: val}
 	ll.Tail.Next = &newNode
 	ll.Tail = &newNode
 }
@@ -39,13 +38,28 @@ func (ll *LinkedList[T]) Contains(val T) bool {
 	return false
 }
 
-func (ll *LinkedList[T]) Remove(val T) {
-	for n := ll.Head; n != nil; {
+func (ll *LinkedList[T]) RemoveFirst(val T) {
+	if ll.Head.Value == val {
+		ll.Head = ll.Head.Next
+		return
+	}
+
+	prev := ll.Head
+	for n := prev.Next; n != nil; n = n.Next {
 		if n.Value == val {
-			prev := n.Previous
 			prev.Next = n.Next
+			if n == ll.Tail {
+				ll.Tail = prev
+			}
 			return
 		}
-		n = n.Next
 	}
+}
+
+func (ll *LinkedList[T]) Size() int {
+	counter := 0
+	for n := ll.Head; n != nil; n = n.Next {
+		counter++
+	}
+	return counter
 }
